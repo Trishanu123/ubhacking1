@@ -105,7 +105,7 @@ export const SEEDED_PROGRAMS: IncentiveProgram[] = [
     sourceName: "Official IRS 179D",
     verificationDate: "2026-04-01",
     status: "potentially-applicable",
-    notes: "Tax treatment requires a qualified professional. Watt does not provide tax advice.",
+    notes: "Tax treatment requires a qualified professional. RetroPilot does not provide tax advice.",
   },
   {
     id: "irs-itc",

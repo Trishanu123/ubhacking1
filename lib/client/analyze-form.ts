@@ -1,3 +1,4 @@
+import { readAppSession } from "./session-storage";
 import type { AnalyzeRequest } from "@/lib/types/analysis";
 import type { BuildingType } from "@/lib/types/building";
 import type { BuildingProfile, UtilityData } from "@/lib/types/contracts";
@@ -43,12 +44,15 @@ export const DEMO_FORM: AnalyzeFormState = {
   hasGasService: true,
 };
 
-const STORAGE_KEY = "wattwise:intake";
+const STORAGE_KEY = "retropilot:intake";
 
 export function loadForm(): { form: AnalyzeFormState; extraction: ExtractionResult | null } | null {
   if (typeof window === "undefined") return null;
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    const raw = readAppSession("intake", value => {
+      const parsed = JSON.parse(value);
+      return typeof parsed?.form?.address === "string" && typeof parsed.form.hasGasService === "boolean" && typeof parsed.form.elecRate === "string";
+    });
     if (!raw) return null;
     const saved = JSON.parse(raw) as { form?: Partial<AnalyzeFormState>; extraction?: ExtractionResult | null };
     return { form: { ...EMPTY_FORM, ...saved.form }, extraction: saved.extraction ?? null };
@@ -67,6 +71,8 @@ export function saveForm(form: AnalyzeFormState, extraction: ExtractionResult | 
 
 export function clearForm(): void {
   try {
+    // Adopt an older draft first so clearing cannot resurrect it later.
+    loadForm();
     window.sessionStorage.removeItem(STORAGE_KEY);
   } catch {}
 }

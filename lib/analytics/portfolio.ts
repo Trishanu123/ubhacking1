@@ -1,6 +1,7 @@
+import { EMISSIONS } from "./assumptions";
 import type { EnergyBaseline, FinancialSummary } from "@/lib/types/analysis";
 import type { Recommendation } from "@/lib/types/recommendation";
-import { INTERACTIVE_EFFECTS_FACTOR } from "./assumptions";
+import { packageTotals, packageSavingsRange } from "./budget-planner";
 import { cumulativeCashflow, round } from "./financial";
 
 /**
@@ -9,15 +10,15 @@ import { cumulativeCashflow, round } from "./financial";
  */
 export function summarizePortfolio(recs: Recommendation[], energy: EnergyBaseline): FinancialSummary {
   const included = recs.filter((r) => r.includedInPortfolio);
-  const factor = INTERACTIVE_EFFECTS_FACTOR;
-  const rawSavings = included.reduce((s, r) => s + r.estimatedAnnualSavings, 0);
-  const potentialAnnualSavings = round(rawSavings * factor);
+  const effects = packageTotals(included, energy);
+  const potentialAnnualSavings = round(effects.annualSavings);
   const potentialIncentives = round(included.reduce((s, r) => s + r.incentives, 0));
   const totalProjectCost = round(included.reduce((s, r) => s + r.estimatedCost, 0));
   const totalNetCost = round(included.reduce((s, r) => s + r.netCost, 0));
-  const elecKwh = included.reduce((s, r) => s + Math.max(0, r.annualElectricitySavingsKwh), 0) * factor;
-  const gasTherms = included.reduce((s, r) => s + r.annualGasSavingsTherms, 0) * factor;
-  const co2 = included.reduce((s, r) => s + r.annualCo2eSavingsTons, 0) * factor;
+  const elecKwh = effects.annualElectricitySavingsKwh;
+  const gasTherms = effects.annualGasSavingsTherms;
+  const grid = energy.electricityKwh > 0 ? Math.max(0, (energy.annualCo2eTons - energy.naturalGasTherms * EMISSIONS.gasTonsPerTherm) / energy.electricityKwh) : 0;
+  const co2 = Math.min(energy.annualCo2eTons, elecKwh * grid + gasTherms * EMISSIONS.gasTonsPerTherm);
 
   const paybacks = included
     .filter((r) => r.paybackYears != null && r.estimatedAnnualSavings > 0)
@@ -31,10 +32,7 @@ export function summarizePortfolio(recs: Recommendation[], energy: EnergyBaselin
   return {
     annualEnergyCost: round(energy.annualEnergyCost),
     potentialAnnualSavings,
-    savingsRange: {
-      low: round(potentialAnnualSavings * 0.75),
-      high: round(potentialAnnualSavings * 1.2),
-    },
+    savingsRange: (() => { const range = packageSavingsRange(included, energy, effects); return { low: round(range.low), high: round(range.high) }; })(),
     potentialIncentives,
     totalProjectCost,
     totalNetCost,
@@ -47,7 +45,7 @@ export function summarizePortfolio(recs: Recommendation[], energy: EnergyBaselin
     postRetrofitAnnualCost: round(postCost),
     postRetrofitElectricityKwh: round(postElec),
     postRetrofitGasTherms: round(postGas),
-    interactiveEffectsFactor: factor,
+    interactiveEffectsFactor: effects.overlapFactor,
     opportunityCount: included.length,
     cumulative: cumulativeCashflow(totalNetCost, potentialAnnualSavings, 10),
   };

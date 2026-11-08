@@ -1,12 +1,12 @@
-# Watt: AI-Assisted Building Energy Intelligence
+# RetroPilot: AI-Assisted Building Energy Intelligence
 
 **A clearer path to lower energy bills.**
 
-Watt is a building-energy analysis application that combines property photos, building details, utility consumption, a trained AI prediction model, solar-resource estimates, incentive pathways, and explainable financial screening to help building owners identify promising energy upgrades.
+RetroPilot is a building-energy analysis application that combines property photos, building details, utility consumption, a trained AI prediction model, solar-resource estimates, incentive pathways, and explainable financial screening to help building owners identify promising energy upgrades.
 
 ## Overview
 
-Energy decisions usually require gathering building details, interpreting bills, inventorying appliances, estimating savings, and researching incentives across different sources. Watt organizes this work into one workflow:
+Energy decisions usually require gathering building details, interpreting bills, inventorying appliances, estimating savings, and researching incentives across different sources. RetroPilot organizes this work into one workflow:
 
 **Photos → Building → Energy → AI Prediction → Recommended Upgrades → Report**
 
@@ -23,10 +23,11 @@ Users can examine projected changes in electricity and natural-gas consumption, 
 - **Solar modeling**: NREL PVWatts v8 production estimates.
 - **Incentive exploration**: curated incentive catalog with modeled net costs.
 - **Financial analysis**: net cost, simple payback, annual ROI, and lifetime savings, with confidence ranges.
+- **Installer recommendations**: for every recommended upgrade, live AI web search finds real installation companies near the property and compares them on job fit and published pricing.
 - **AI-generated explanations**: plain-language results grounded in the calculated outputs.
 - **Reports**: printable analysis reports and optional saved analyses.
 
-## How Watt Works
+## How RetroPilot Works
 
 ### 1. Visual property inspection
 
@@ -36,7 +37,7 @@ Vents, windows, and meters are recorded as building context and are not treated 
 
 ### 2. Building and utility baseline
 
-Enter the building address, type, floor area, age, floors, fuel configuration, and measured energy usage. Nominatim supports location lookup. Utility usage can be entered manually or extracted from a bill for review. If energy data is missing, Watt uses transparent building-type, size, climate, and vintage assumptions to produce an indicative baseline. A single seasonal bill is not presented as a verified annual measurement.
+Enter the building address, type, floor area, age, floors, fuel configuration, and measured energy usage. Nominatim supports location lookup. Utility usage can be entered manually or extracted from a bill for review. If energy data is missing, RetroPilot uses transparent building-type, size, climate, and vintage assumptions to produce an indicative baseline. A single seasonal bill is not presented as a verified annual measurement.
 
 ### 3. AI energy prediction
 
@@ -47,7 +48,7 @@ The reviewed photo inventory, building details, and utility data are assembled i
 - Image confidence, hidden equipment, and unknown operating hours widen the uncertainty range instead of being asserted as confirmed inventory.
 - Predictions are shown with a range, the model version, and the inputs used.
 
-**Model accuracy: 97%.** Accuracy is measured on held-out test buildings that were kept separate from training data.
+**Model accuracy: 78%.** Accuracy is measured on held-out test buildings that were kept separate from training data.
 
 ### 4. Energy upgrade screening
 
@@ -72,7 +73,19 @@ Lifetime net saving = annual savings * assumed lifetime - net installed cost
 
 Zero or negative savings and zero net cost are handled explicitly rather than producing invalid ratios. Every estimate shows its inputs, confidence, and assumptions, and distinguishes *measured*, *user-entered*, *estimated*, and *model-predicted* values.
 
-### 6. AI extraction and reporting
+### 6. Installer recommendations
+
+The company feature uses live web search through the OpenAI API, followed by a separate AI comparison step.
+
+1. **Location and upgrade details.** The search uses the city, state, and ZIP already entered, plus the building type, size, and selected upgrade. When available, city and ZIP replace the street address in the search.
+2. **AI searches for real installation companies.** It looks for relevant company websites, service-area pages, and contractor directories. It also searches nearby areas when local options are limited.
+3. **A second AI call organizes and compares the findings.** It returns structured company names, websites, available phone numbers, services, coverage, reasons for recommending each company, and published pricing.
+4. **The server validates the output.** Zod checks the structure. Website and evidence links must match consulted search sources. Unsupported phone numbers and prices are removed, and known directory profiles cannot serve as official company websites.
+5. **The dashboard displays the results.** The top upgrade gets a company summary. Selecting another upgrade opens its side panel. Results are cached, and **Find more companies** widens the search while excluding previous results.
+
+**Price comparison limit:** RetroPilot identifies the lowest published starting rate only when multiple companies provide comparable installed prices. Otherwise, it shows "quote required." The suggested first company reflects job fit, not a guaranteed cheapest price. Always get multiple quotes.
+
+### 7. AI extraction and reporting
 
 The OpenAI API supports utility document extraction, visual item recognition, and explanation of results. Zod validates all structured outputs. The financial formulas remain deterministic and auditable; the language model explains results but does not replace the calculations.
 
@@ -103,6 +116,7 @@ flowchart TD
 | AI prediction | TensorFlow / Keras model | Electricity and gas baseline prediction from photo, building, and utility features |
 | Energy and financial screening | `lib/analytics` | Retrofit rankings, savings, and portfolios |
 | External services | `lib/services` | Geocoding, solar, utility, and incentive integrations |
+| Installer search and comparison | OpenAI web search + structured comparison, Zod validation | Finding, validating, and ranking installation companies per upgrade |
 | AI explanations and bill extraction | `lib/ai` | Interpreting user documents and explaining results |
 | Persistence | Supabase Postgres or in-memory/browser fallback | Saved analyses when configured |
 
@@ -160,10 +174,15 @@ npm run lint
 npm run build
 ```
 
-## Project References
+## Demo Walkthrough
 
-- `ARCHITECTURE.md`: backend and system structure
-- `PROPERTY_PHOTOS.md`: image recognition and handling
-- `DEMO_SCRIPT.md`: presentation walkthrough
-- `supabase/schema.sql`: optional persistence schema
+1. Start with **Explore the demo**, using the fictional Buffalo office example (25,000 sq ft, 145,000 kWh/year, 42,000 therms/year).
+2. Review the predicted baseline usage, recommended upgrades, payback, and supporting assumptions.
+3. Open **Analyze**, add property photos, inspect the visible-item recognition, and review or correct counts.
+4. Enter building and utility data and submit the analysis.
+5. Show how the reviewed photo inventory feeds the AI prediction and changes the savings estimates.
+6. Walk through the detailed financial comparison and next steps.
 
+---
+
+**RetroPilot**: turning building and energy information into transparent, actionable retrofit decisions.

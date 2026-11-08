@@ -7,7 +7,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
           <span className="inline-flex size-7 items-center justify-center rounded-md bg-primary text-[11px] font-semibold tracking-tight text-primary-foreground">
-            W
+            RP
           </span>
           <span className="text-sm font-semibold tracking-tight">{PRODUCT_NAME}</span>
         </Link>

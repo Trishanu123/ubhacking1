@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Analysis } from "@/lib/types/analysis";
-import { AnalysisReport } from "@/components/analysis/report";
+import { InstallerResults as AnalysisReport } from "@/components/analysis/installer-results";
 import { ReportSkeleton } from "@/components/analysis/report-skeleton";
 import { cacheAnalysis, readCachedAnalysis } from "@/lib/client/analysis-cache";
 
@@ -38,7 +38,7 @@ export function AnalysisLoader({
       .catch(() => setMissing(true));
   }, [analysis, id]);
 
-  if (analysis) return <AnalysisReport analysis={analysis} debug={debug} />;
+  if (analysis) return <AnalysisReport key={analysis.id} analysis={analysis} debug={debug} />;
   if (missing) {
     return (
       <main className="mx-auto max-w-lg px-4 py-24 text-center">

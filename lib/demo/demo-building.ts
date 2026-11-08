@@ -32,7 +32,7 @@ export const DEMO_BUILDING: BuildingData = {
   },
   dataSources: [
     source(
-      "Watt demo building (illustrative Buffalo office)",
+      "RetroPilot demo building (illustrative Buffalo office)",
       "building",
       undefined,
       "Demo / estimated data. Not a real parcel or utility account.",

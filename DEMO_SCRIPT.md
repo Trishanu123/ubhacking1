@@ -1,4 +1,4 @@
-# Watt — 2-minute demo script
+# RetroPilot — 2-minute demo script
 
 Goal: show that fragmented building, utility, incentive, and financial data becomes one preliminary retrofit report.
 

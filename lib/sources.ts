@@ -11,7 +11,7 @@ export function source(
 
 export const METHODOLOGY_SOURCES: DataSource[] = [
   source(
-    "Watt deterministic calculation engine",
+    "RetroPilot deterministic calculation engine",
     "methodology",
     undefined,
     "Net cost, payback, ROI and lifetime savings are computed in TypeScript. The LLM does not perform financial arithmetic.",

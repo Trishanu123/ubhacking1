@@ -1,0 +1,314 @@
+{
+  "version": 1,
+  "lastReviewed": "2026-11-08",
+  "currency": "USD",
+  "notice": "Planning references, not quotes. No inflation or Buffalo premium is invented. TODO fields must be verified before treating any allowance as current local market data. Existing savings predictions are unchanged.",
+  "entries": [
+    {
+      "id": "led",
+      "label": "LED fixtures",
+      "unit": "fixture",
+      "low": 110,
+      "typical": 160,
+      "high": 230,
+      "typicalLifetimeYears": 15,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.energy.gov/eere/femp/downloads/led-retrofit-kits-tleds-and-lighting-controls-application-guide",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "Cost numbers carried forward from lib/analytics/cost-model.ts, not verified WNY market prices. Linked source is a verification/design reference, not evidence for these exact amounts.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": "ledPerFixture"
+    },
+    {
+      "id": "lighting_controls",
+      "label": "Occupancy and daylight controls",
+      "unit": "sq_ft",
+      "low": 0.35,
+      "typical": 0.55,
+      "high": 0.85,
+      "typicalLifetimeYears": 15,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.energy.gov/eere/femp/downloads/led-retrofit-kits-tleds-and-lighting-controls-application-guide",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "Cost numbers carried forward from lib/analytics/cost-model.ts, not verified WNY market prices. Linked source is a verification/design reference, not evidence for these exact amounts.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": "lightingControlsPerSqFt"
+    },
+    {
+      "id": "hvac_controls",
+      "label": "Building heating/cooling controls and commissioning",
+      "unit": "sq_ft",
+      "low": 0.6,
+      "typical": 1,
+      "high": 1.6,
+      "typicalLifetimeYears": 15,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.nyserda.ny.gov/All-Programs/Real-Time-Energy-Management",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "Cost numbers carried forward from lib/analytics/cost-model.ts, not verified WNY market prices. Linked source is a verification/design reference, not evidence for these exact amounts.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": "hvacControlsPerSqFt"
+    },
+    {
+      "id": "furnace_boiler",
+      "label": "Heating and cooling full replacement allowance",
+      "unit": "ton",
+      "low": 2000,
+      "typical": 2800,
+      "high": 3800,
+      "typicalLifetimeYears": 20,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.energy.gov/energysaver/furnaces-and-boilers",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "Cost numbers carried forward from lib/analytics/cost-model.ts, not verified WNY market prices. Linked source is a verification/design reference, not evidence for these exact amounts.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": "hvacFullPerTon"
+    },
+    {
+      "id": "air_source_heat_pump",
+      "label": "Cold-climate air-source heat pump",
+      "unit": "ton",
+      "low": 3000,
+      "typical": 4200,
+      "high": 5500,
+      "typicalLifetimeYears": 18,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.nyserda.ny.gov/-/media/Project/Nyserda/Files/Publications/PPSER/Program-Evaluation/2024-Market-Characterization-and-Assessment-Report.pdf",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "Cost numbers carried forward from lib/analytics/cost-model.ts, not verified WNY market prices. Linked source is a verification/design reference, not evidence for these exact amounts.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": "heatPumpPerTon",
+      "benchmark": {
+        "value": 4292,
+        "unit": "USD/nominal cooling ton",
+        "sourceDate": "2024-07-23",
+        "note": "NYSERDA residential pilot 2021\u20132022 equipment project average, Table 2-20; not a Buffalo commercial installed quote. Existing commercial allowance retained pending validation."
+      }
+    },
+    {
+      "id": "ground_source_heat_pump",
+      "label": "Ground-source heat pump",
+      "unit": "ton",
+      "low": null,
+      "typical": null,
+      "high": null,
+      "typicalLifetimeYears": 25,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.nyserda.ny.gov/-/media/Project/Nyserda/Files/Publications/Research/Other-Technical-Reports/24-04-Field-Monitoring-Ground-Source-Heat-Pumps-on-Long-Island-acc.pdf",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "No verified installed-cost range or equipment count available. TODO values are null; no costs are invented. Not added to engine recommendations.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": null,
+      "benchmark": {
+        "low": 5000,
+        "typical": 10570,
+        "high": 19821,
+        "unit": "USD/ton",
+        "sourceDate": "2024",
+        "note": "NYSERDA Long Island residential field study; context only, not extrapolated to Buffalo commercial properties."
+      }
+    },
+    {
+      "id": "air_sealing",
+      "label": "Air sealing",
+      "unit": "sq_ft",
+      "low": 0.3,
+      "typical": 0.5,
+      "high": 0.8,
+      "typicalLifetimeYears": 25,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://bsesc.energy.gov/sites/default/files/2024-09/CEE_Weatherization_for_Contractors_TRC_01.16.24.pdf",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "Cost numbers carried forward from lib/analytics/cost-model.ts, not verified WNY market prices. Linked source is a verification/design reference, not evidence for these exact amounts.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": "airSealingPerSqFt"
+    },
+    {
+      "id": "insulation",
+      "label": "Roof insulation",
+      "unit": "roof_sq_ft",
+      "low": 1.5,
+      "typical": 3.25,
+      "high": 5,
+      "typicalLifetimeYears": 25,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://bsesc.energy.gov/sites/default/files/2024-09/CEE_Weatherization_for_Contractors_TRC_01.16.24.pdf",
+      "sourceDate": "2024-01-16",
+      "status": "national_benchmark",
+      "sourceNote": "DOE-hosted CEE contractor guide p.3: installed insulation range $1.50\u2013$5.00/sq ft. Typical $3.25 is the arithmetic midpoint, not a reported mean. Residential/national reference applied as provisional roof-area allowance; commercial scope and Buffalo pricing require quotes.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": null
+    },
+    {
+      "id": "windows",
+      "label": "Replacement windows",
+      "unit": "unit",
+      "low": null,
+      "typical": null,
+      "high": null,
+      "typicalLifetimeYears": 25,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://bsesc.energy.gov/sites/default/files/2024-09/CEE_Weatherization_for_Contractors_TRC_01.16.24.pdf",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "No verified installed-cost range or equipment count available. TODO values are null; no costs are invented. Not added to engine recommendations.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": null
+    },
+    {
+      "id": "smart_thermostat",
+      "label": "Smart thermostat",
+      "unit": "unit",
+      "low": null,
+      "typical": null,
+      "high": null,
+      "typicalLifetimeYears": 15,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.energy.gov/energysaver/thermostats",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "No verified installed-cost range or equipment count available. TODO values are null; no costs are invented. Not added to engine recommendations.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": null
+    },
+    {
+      "id": "heat_pump_water_heater",
+      "label": "Central/commercial heat-pump water heating",
+      "unit": "annual_therm",
+      "low": 9,
+      "typical": 14,
+      "high": 20,
+      "typicalLifetimeYears": 13,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.nyserda.ny.gov/-/media/Project/Nyserda/Files/Publications/PPSER/Program-Evaluation/2024-Market-Characterization-and-Assessment-Report.pdf",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "Cost numbers carried forward from lib/analytics/cost-model.ts, not verified WNY market prices. Linked source is a verification/design reference, not evidence for these exact amounts.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": "hpwhPerAnnualTherm",
+      "benchmark": {
+        "value": 2848,
+        "unit": "USD/residential equipment project",
+        "sourceDate": "2024-07-23",
+        "note": "NYSERDA Table 2-20; not a commercial central-system installed quote or per-therm cost."
+      }
+    },
+    {
+      "id": "rooftop_solar",
+      "label": "Commercial rooftop solar",
+      "unit": "kW",
+      "low": 1485,
+      "typical": 1980,
+      "high": 2376,
+      "typicalLifetimeYears": 25,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://www.energy.gov/cmei/systems/solar-photovoltaic-system-cost-benchmarks",
+      "sourceDate": "2025-Q1",
+      "status": "national_benchmark",
+      "sourceNote": "DOE/NREL PV-only Table 2: commercial 250 kW school rooftop modeled market price $1.98/W, in 2024 dollars. Converted to $1,980/kW. Low/high use existing savings-uncertainty multipliers 0.75/1.20 as a planning band, NOT observed market quantiles. No storage included. Verify size, BABA scope, local labor and currency-year adjustment.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": null
+    },
+    {
+      "id": "battery_storage",
+      "label": "Behind-the-meter battery",
+      "unit": "kWh",
+      "low": 700,
+      "typical": 950,
+      "high": 1250,
+      "typicalLifetimeYears": 12,
+      "lifetimeSource": "Existing app planning lifetime; not a manufacturer warranty. TODO: verify for selected equipment.",
+      "lastReviewed": "2026-11-08",
+      "sourceUrl": "https://atb.nrel.gov/electricity/2024b/commercial_battery_storage",
+      "sourceDate": null,
+      "status": "provisional",
+      "sourceNote": "Cost numbers carried forward from lib/analytics/cost-model.ts, not verified WNY market prices. Linked source is a verification/design reference, not evidence for these exact amounts.",
+      "buffaloRegionMultiplier": null,
+      "regionNote": "TODO: derive a Buffalo multiplier from comparable current local quotes. Neutral 1.0 is used until verified; no regional premium is asserted.",
+      "todo": [
+        "Verify current installed low/typical/high costs for commercial building scale, including labor, permits, electrical/distribution work and disposal.",
+        "Verify Buffalo region multiplier and currency year."
+      ],
+      "legacyCostKey": "batteryPerKwh"
+    }
+  ]
+}

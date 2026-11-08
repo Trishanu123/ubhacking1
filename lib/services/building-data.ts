@@ -60,7 +60,7 @@ export class NominatimBuildingProvider implements BuildingDataProvider {
     const res = await fetch(url, {
       headers: {
         Accept: "application/json",
-        "User-Agent": "Watt/1.0 (AI for Good competition; contact: local-dev)",
+        "User-Agent": "RetroPilot/1.0 (AI for Good competition; contact: local-dev)",
       },
       signal: AbortSignal.timeout(7000),
     });

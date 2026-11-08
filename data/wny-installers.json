@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "notice": "TEMPLATE ONLY — unverified, replace with real data. Templates are excluded from retrieval and never presented as businesses.",
+  "entries": [
+    {
+      "id": "template-heating",
+      "name": "TEMPLATE — heating installer (replace with real data)",
+      "website": null,
+      "phone": null,
+      "serviceArea": ["Erie", "Niagara"],
+      "services": ["air_source_heat_pump", "ground_source_heat_pump", "furnace_boiler", "smart_thermostat", "hvac_controls", "heat_pump_water_heater"],
+      "certifications": [],
+      "licenseInsuranceNotes": "TODO: check applicable municipal licenses and current insurance directly.",
+      "priceTier": "unverified",
+      "priceTierSource": null,
+      "priceVerifiedOn": null,
+      "sourceUrls": [],
+      "lastVerified": null,
+      "verificationStatus": "unverified",
+      "isTemplate": true
+    },
+    {
+      "id": "template-envelope-lighting",
+      "name": "TEMPLATE — efficiency installer (replace with real data)",
+      "website": null,
+      "phone": null,
+      "serviceArea": ["Erie", "Niagara", "Genesee", "Orleans", "Chautauqua", "Wyoming", "Cattaraugus", "Allegany"],
+      "services": ["led", "lighting_controls", "insulation", "air_sealing", "windows"],
+      "certifications": [],
+      "licenseInsuranceNotes": "TODO: verify licenses, insurance and BPI credentials where relevant.",
+      "priceTier": "unverified",
+      "priceTierSource": null,
+      "priceVerifiedOn": null,
+      "sourceUrls": [],
+      "lastVerified": null,
+      "verificationStatus": "unverified",
+      "isTemplate": true
+    },
+    {
+      "id": "template-solar-storage",
+      "name": "TEMPLATE — solar installer (replace with real data)",
+      "website": null,
+      "phone": null,
+      "serviceArea": ["Erie", "Niagara"],
+      "services": ["rooftop_solar", "battery_storage"],
+      "certifications": [],
+      "licenseInsuranceNotes": "TODO: verify NY-Sun participation, electrical licensing and insurance.",
+      "priceTier": "unverified",
+      "priceTierSource": null,
+      "priceVerifiedOn": null,
+      "sourceUrls": [],
+      "lastVerified": null,
+      "verificationStatus": "unverified",
+      "isTemplate": true
+    }
+  ]
+}

@@ -18,6 +18,7 @@ export interface CalcStep {
 }
 
 export interface Recommendation {
+  estimateEvidence?: import("./refinement").EstimateEvidence;
   id: string;
   category: Technology;
   categoryLabel: string;

@@ -3,14 +3,15 @@ import type { BuildingData, Provenance } from "@/lib/types/building";
 import type { EnergyBaseline } from "@/lib/types/analysis";
 
 function isMeasured(p: Provenance | undefined): boolean {
-  return p === "user" || p === "ai-extracted" || p === "rule-extracted" || p === "demo" || p === "api";
+  return p === "user" || p === "ai-extracted" || p === "rule-extracted" || p === "api";
 }
 
 export function assessConfidence(building: BuildingData, energy: EnergyBaseline): ConfidenceAssessment {
+  const hasGas = energy.naturalGasTherms > 0;
   const factors = [
     {
       label: "Utility consumption",
-      met: isMeasured(energy.provenance.electricityKwh) && isMeasured(energy.provenance.naturalGasTherms),
+      met: isMeasured(energy.provenance.electricityKwh) && (!hasGas || isMeasured(energy.provenance.naturalGasTherms)),
       detail: !isMeasured(energy.provenance.electricityKwh)
         ? "Consumption estimated from building characteristics"
         : energy.naturalGasTherms === 0
@@ -21,7 +22,7 @@ export function assessConfidence(building: BuildingData, energy: EnergyBaseline)
     },
     {
       label: "Utility rates",
-      met: isMeasured(energy.provenance.electricityRate) && isMeasured(energy.provenance.gasRate),
+      met: isMeasured(energy.provenance.electricityRate) && (!hasGas || isMeasured(energy.provenance.gasRate)),
       detail: isMeasured(energy.provenance.electricityRate)
         ? "Rates provided, extracted, or looked up"
         : "Default regional planning rates used",

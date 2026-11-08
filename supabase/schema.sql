@@ -1,4 +1,4 @@
--- Watt schema. Run in the Supabase SQL editor.
+-- RetroPilot schema. Run in the Supabase SQL editor.
 -- Persistence is optional: without these tables the app still stores analyses in memory + the browser session.
 
 create extension if not exists "pgcrypto";

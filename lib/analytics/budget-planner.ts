@@ -1,6 +1,6 @@
 import type { EnergyBaseline } from "@/lib/types/analysis";
 import type { Recommendation } from "@/lib/types/recommendation";
-import { EMISSIONS, INTERACTIVE_EFFECTS_FACTOR, SAVINGS_UNCERTAINTY } from "./assumptions";
+import { EMISSIONS, INTERACTIVE_EFFECTS_FACTOR } from "./assumptions";
 import { gridFactor } from "./energy-baseline";
 
 export type BudgetPriority = "bills" | "emissions" | "payback";
@@ -26,7 +26,7 @@ const EPSILON = 1e-8;
 const cents = (amount: number) => Math.round(amount * 100);
 const isHeatingReplacement = (r: Recommendation) => r.category === "hvac" || r.category === "heat_pump";
 
-function compatible(candidate: Recommendation, selected: Recommendation[]) {
+export function compatible(candidate: Recommendation, selected: Recommendation[]) {
   return !selected.some(existing =>
     existing.id === candidate.id ||
     (candidate.alternativeGroup && candidate.alternativeGroup === existing.alternativeGroup) ||
@@ -35,7 +35,7 @@ function compatible(candidate: Recommendation, selected: Recommendation[]) {
   );
 }
 
-function packageTotals(selected: Recommendation[], energy: EnergyBaseline, state?: string | null) {
+export function packageTotals(selected: Recommendation[], energy: EnergyBaseline, state?: string | null) {
   const factor = selected.length > 1 ? INTERACTIVE_EFFECTS_FACTOR : 1;
   const nonSolar = selected.filter(r => r.category !== "solar");
   const rawElectricity = nonSolar.reduce((s, r) => s + r.annualElectricitySavingsKwh, 0) * factor;
@@ -62,6 +62,19 @@ function packageTotals(selected: Recommendation[], energy: EnergyBaseline, state
     annualGasSavingsTherms: gas,
     annualCo2eSavingsTons: Math.min(energy.annualCo2eTons, electricity * gridFactor(state ?? null) + gas * EMISSIONS.gasTonsPerTherm),
     overlapFactor: factor,
+  };
+}
+
+/** Propagate the actual per-upgrade planning scenarios, including equipment refinements.
+ * Overlap-adjusted sensitivities are scenarios, not statistical confidence bounds.
+ */
+export function packageSavingsRange(selected: Recommendation[], energy: EnergyBaseline, totals: ReturnType<typeof packageTotals>) {
+  const factor = totals.overlapFactor;
+  const lowDelta = selected.reduce((sum, r) => sum + Math.min(0, r.savingsRange.low - r.estimatedAnnualSavings), 0) * factor;
+  const highDelta = selected.reduce((sum, r) => sum + Math.max(0, r.savingsRange.high - r.estimatedAnnualSavings), 0) * factor;
+  return {
+    low: Math.min(totals.annualSavings, totals.annualSavings + lowDelta),
+    high: Math.max(totals.annualSavings, Math.min(energy.annualEnergyCost, totals.annualSavings + highDelta)),
   };
 }
 
@@ -117,10 +130,7 @@ export function planBudget(
         ...totals, priority, budget: budgetCents / 100, selected: [...selected], upfrontCost: cost,
         remainingBudget: (budgetCents - costCents) / 100,
         paybackYears: totals.annualSavings > EPSILON ? cost / totals.annualSavings : null,
-        savingsRange: {
-          low: totals.annualSavings * (totals.annualSavings >= 0 ? SAVINGS_UNCERTAINTY.low : SAVINGS_UNCERTAINTY.high),
-          high: Math.min(energy.annualEnergyCost, totals.annualSavings * (totals.annualSavings >= 0 ? SAVINGS_UNCERTAINTY.high : SAVINGS_UNCERTAINTY.low)),
-        },
+        savingsRange: packageSavingsRange(selected, energy, totals),
         evaluatedPackages: 0,
       };
       if (better(candidate, best)) best = candidate;
