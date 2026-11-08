@@ -1,0 +1,13 @@
+case_id,address,building_type,square_feet,year_built,stories,electricity_kwh_annual,natural_gas_therms_annual,electricity_rate_usd_per_kwh,gas_rate_usd_per_therm,has_gas_service,utility_provider,months_of_data,notes
+office_buffalo,"123 Main Street, Buffalo, NY 14202",office,25000,1988,3,145000,42000,0.15,1.10,true,National Fuel and NYSEG,12,Cold climate older office; high gas heating load
+retail_rochester,"456 Monroe Avenue, Rochester, NY 14607",retail,18000,2001,1,310000,8500,0.14,1.05,true,RG&E,12,Lighting and cooling intensive neighborhood retail
+restaurant_syracuse,"789 South Salina Street, Syracuse, NY 13202",restaurant,6200,1976,2,285000,14500,0.16,1.12,true,National Grid,12,Kitchen equipment and ventilation dominate electric use
+warehouse_albany,"210 Warehouse Way, Albany, NY 12205",warehouse,82000,1995,1,410000,18000,0.13,1.08,true,National Grid,12,Large distribution warehouse with moderate conditioned area
+multifamily_nyc,"88 Riverside Drive, New York, NY 10024",multifamily,96000,1928,9,980000,78000,0.23,1.65,true,Con Edison,12,Prewar apartment building with central gas heat and common loads
+hotel_ithaca,"17 Lake Street, Ithaca, NY 14850",hotel,54000,2008,5,1850000,46000,0.15,1.09,true,NYSEG,12,Guest room loads and year-round hot water demand
+school_binghamton,"305 Front Street, Binghamton, NY 13905",school,112000,1964,3,890000,112000,0.14,1.02,true,NYSEG,12,Public school; seasonal occupancy and significant heating load
+healthcare_queens,"42 Queens Plaza, Long Island City, NY 11101",healthcare,68000,2012,7,2480000,39000,0.21,1.52,true,Con Edison,12,Outpatient medical facility with extended operating hours
+industrial_utica,"900 Industrial Road, Utica, NY 13502",industrial,145000,1982,2,3250000,165000,0.13,1.00,true,National Grid,12,Light manufacturing with process electricity and gas use
+office_rochester_electric,"600 East Main Street, Rochester, NY 14604",office,42000,2017,6,735000,0,0.14,,false,RG&E,12,Newer all-electric office; no gas service
+retail_buffalo_partial,"33 Elmwood Avenue, Buffalo, NY 14201",retail,9500,1948,2,158000,6200,0.15,1.10,true,NYSEG,6,Partial-year utility input for checking shorter billing history
+hotel_manhattan_highuse,"125 West 45th Street, New York, NY 10036",hotel,128000,1989,24,5200000,112000,0.24,1.70,true,Con Edison,12,Large high-rise hotel with substantial ventilation and hot water demand
