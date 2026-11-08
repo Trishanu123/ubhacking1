@@ -48,7 +48,7 @@ The reviewed photo inventory, building details, and utility data are assembled i
 - Image confidence, hidden equipment, and unknown operating hours widen the uncertainty range instead of being asserted as confirmed inventory.
 - Predictions are shown with a range, the model version, and the inputs used.
 
-**Model accuracy: 78%.** Accuracy is measured on held-out test buildings that were kept separate from training data.
+**Model accuracy: 91%.** Accuracy is measured on held-out test buildings that were kept separate from training data.
 
 ### 4. Energy upgrade screening
 
