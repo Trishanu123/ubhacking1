@@ -133,12 +133,9 @@ flowchart TD
 
 ## Model and Data
 
-- `data/property_energy_training.csv`: training dataset with utility data, equipment counts, and train/validation/test assignments.
 - `models/property_energy_model.h5`: the trained Keras energy prediction model.
 - `data/test-buildings.csv`: 12 scenarios for testing.
-- `data/appliance-catalog.json`: reference appliance inventory catalog.
 
-Records are split by building between training and testing so test results reflect unseen properties.
 
 ## Run Locally
 
