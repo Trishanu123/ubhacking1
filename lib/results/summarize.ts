@@ -74,3 +74,18 @@ export function summarizeAnalysis(a: Analysis): RetrofitAnalysisResult {
     others,
   };
 }
+
+/** Everyday labels for the short report; detailed names remain in each upgrade sheet. */
+export function simpleUpgradeName(measure: Pick<Recommendation, "category" | "name">): string {
+  const names: Partial<Record<Recommendation["category"], string>> = {
+    lighting: "Switch to energy-saving lights",
+    controls: "Use smarter heating and cooling controls",
+    hvac: "Upgrade your heating and cooling",
+    heat_pump: "Switch to a heat pump",
+    envelope: "Improve insulation and seal air leaks",
+    solar: "Add rooftop solar panels",
+    storage: "Add battery storage",
+    water_heating: "Upgrade your water heating",
+  };
+  return names[measure.category] ?? measure.name;
+}

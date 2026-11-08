@@ -6,25 +6,21 @@ import {
   ArrowRight,
   Download,
   ExternalLink,
-  Flame,
-  Gauge,
   Landmark,
-  Layers,
   Plus,
-  ShieldCheck,
-  Sparkles,
   Star,
-  Zap,
+  Sparkles,
 } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import { AnalysisCharts } from "@/components/charts/analysis-charts";
+import { BudgetPlanner } from "@/components/analysis/budget-planner";
 import type { Analysis } from "@/lib/types/analysis";
 import type { UpgradeMeasure } from "@/lib/types/contracts";
 import type { Priority, Recommendation } from "@/lib/types/recommendation";
 import { BUILDING_TYPE_LABELS } from "@/lib/types/building";
-import { summarizeAnalysis } from "@/lib/results/summarize";
+import { simpleUpgradeName, summarizeAnalysis } from "@/lib/results/summarize";
 import { cn } from "@/lib/utils";
 import { num, pct, usd, years } from "@/lib/format";
 
@@ -43,7 +39,6 @@ export function AnalysisReport({ analysis, debug }: { analysis: Analysis; debug?
   const result = useMemo(() => summarizeAnalysis(analysis), [analysis]);
   const [openId, setOpenId] = useState<string | null>(null);
   const openRec = analysis.recommendations.find((r) => r.id === openId) ?? null;
-  const aiExplained = analysis.explanation.method === "ai";
   const { totals, topPick, others, baseline } = result;
   const b = analysis.building;
 
@@ -97,134 +92,60 @@ export function AnalysisReport({ analysis, debug }: { analysis: Analysis; debug?
         </div>
       </header>
 
-      {/* A. Hero metrics */}
-      <section
-        aria-label="Plan summary"
-        className={cn(SURFACE, "mt-8 grid divide-y divide-slate-100 md:grid-cols-3 md:divide-x md:divide-y-0", ENTER, "delay-75")}
-      >
-        <div className="p-6 sm:p-8">
-          <p className={MICRO}>Total annual savings</p>
-          <p className="mt-3 flex items-baseline gap-1.5">
-            <span className="text-4xl font-semibold tracking-tight text-emerald-600 tabular-nums">
-              {usd(totals.annualSavings)}
-            </span>
-            <span className="text-base font-medium text-slate-400">/ yr</span>
-          </p>
-          <span className="mt-3 inline-flex rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 ring-1 ring-emerald-600/15">
-            {pct(totals.shareOfBaseline)} of baseline utility cost
-          </span>
-          <p className="mt-3 text-xs text-slate-500">
-            Likely range {usd(totals.savingsRange.low)}–{usd(totals.savingsRange.high)} on {usd(baseline.annualEnergyCost)}/yr spend
-          </p>
+      <section aria-label="Plan summary" className={cn(SURFACE, "mt-8 p-6 sm:p-8", ENTER)}>
+        <p className="text-sm text-slate-600">Your building could save around</p>
+        <p className="mt-2 text-4xl font-semibold tracking-tight text-emerald-600 sm:text-5xl">
+          {usd(totals.annualSavings)} <span className="text-lg font-normal text-slate-500">a year</span>
+        </p>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-500">
+          This estimate combines the upgrades in your full plan. Use your budget below to find a smaller package that works for you.
+        </p>
+        <div className="mt-6 grid gap-5 border-t border-slate-100 pt-5 sm:grid-cols-2">
+          <div><p className="text-sm text-slate-500">Estimated cost before rebates</p><p className="mt-1 text-xl font-semibold text-slate-900">{usd(totals.upfrontCost)}</p></div>
+          <div><p className="text-sm text-slate-500">Time for savings to cover the cost</p><p className="mt-1 text-xl font-semibold text-slate-900">{totals.blendedPaybackYears == null ? "Not yet estimated" : `${num(totals.blendedPaybackYears, 1)} years`}</p><p className="mt-1 text-xs text-slate-500">Assumes estimated rebates are received.</p></div>
         </div>
-        <div className="p-6 sm:p-8">
-          <p className={MICRO}>Total modeled incentives</p>
-          <p className="mt-3 flex items-baseline gap-1.5">
-            <span className="text-4xl font-semibold tracking-tight text-slate-900 tabular-nums">{usd(totals.incentives)}</span>
-            <span className="text-base font-medium text-slate-400">available</span>
-          </p>
-          <span className="mt-3 inline-flex rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-            {analysis.incentives.length} program{analysis.incentives.length === 1 ? "" : "s"} matched
-          </span>
-          <p className="mt-3 text-xs text-slate-500">Planning estimate — eligibility and amounts must be confirmed.</p>
-        </div>
-        <div className="p-6 sm:p-8">
-          <p className={MICRO}>Blended simple payback</p>
-          <p className="mt-3 flex items-baseline gap-1.5">
-            <span className="text-4xl font-semibold tracking-tight text-slate-900 tabular-nums">
-              {totals.blendedPaybackYears == null ? "—" : totals.blendedPaybackYears.toFixed(1)}
-            </span>
-            <span className="text-base font-medium text-slate-400">years payback</span>
-          </p>
-          <p className="mt-3 text-xs leading-relaxed text-slate-500 tabular-nums">
-            {usd(totals.upfrontCost)} upfront − {usd(totals.incentives)} incentives ={" "}
-            <span className="font-medium text-slate-700">{usd(totals.netCost)} net</span>
-            <br />
-            {usd(totals.netCost)} ÷ {usd(totals.annualSavings)}/yr savings
-          </p>
-        </div>
+        <p className="mt-5 text-xs leading-5 text-slate-500">A starting estimate, not a quote. Confirm costs, savings and rebate eligibility before making a decision.</p>
+        <details className="mt-4 border-t border-slate-100 pt-4">
+          <summary className="cursor-pointer text-sm font-medium text-slate-700">See the cost and savings breakdown</summary>
+          <div className="mt-4 grid gap-x-8 sm:grid-cols-2">
+            <Row label="Current yearly energy bills" value={usd(baseline.annualEnergyCost)} />
+            <Row label="Estimated bill reduction" value={pct(totals.shareOfBaseline)} />
+            <Row label="Yearly savings range" value={`${usd(totals.savingsRange.low)}–${usd(totals.savingsRange.high)}`} />
+            <Row label="Estimated rebates and incentives" value={usd(totals.incentives)} />
+            <Row label="Cost after estimated incentives" value={usd(totals.netCost)} />
+          </div>
+          <p className="mt-3 text-xs leading-5 text-slate-500">Payback divides the cost after estimated incentives by yearly savings. Incentives are planning estimates, not confirmed offers.</p>
+        </details>
       </section>
 
-      {/* B. Top pick */}
       {topPick && (
-        <section
-          aria-label="Top recommendation"
-          className={cn(
-            "relative mt-6 overflow-hidden rounded-2xl border border-indigo-200/70 bg-gradient-to-br from-indigo-50/70 via-white to-white p-6 shadow-sm sm:p-8",
-            ENTER,
-            "delay-150",
-          )}
-        >
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full bg-indigo-600 px-2.5 py-1 text-xs font-medium text-white">
-              <Star className="size-3 fill-current" /> Top Recommendation
-            </span>
-            {aiExplained && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700 ring-1 ring-indigo-600/15">
-                <Sparkles className="size-3" /> AI-explained
-              </span>
-            )}
-            <span className="text-xs text-slate-500">{topPick.measure.categoryLabel}</span>
-          </div>
-          <div className="mt-4 flex flex-wrap items-end justify-between gap-6">
+        <section aria-label="Top recommendation" className={cn(SURFACE, "mt-6 p-6 sm:p-8", ENTER)}>
+          <p className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700"><Star className="size-4" /> Start here</p>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-5">
             <div className="max-w-2xl">
-              <h2 className="text-2xl font-semibold tracking-tight text-slate-900">{topPick.measure.name}</h2>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">{topPick.pitch}</p>
+              <h2 className="text-xl font-semibold tracking-tight text-slate-900">{simpleUpgradeName(topPick.measure)}</h2>
+              <p className="mt-2 text-sm leading-6 text-slate-600">Could save about {usd(topPick.measure.annualSavings)} a year on its own. Estimated cost: {usd(topPick.measure.upfrontCost)} before rebates.</p>
             </div>
-            <Button variant="outline" className="no-print rounded-xl bg-white" onClick={() => setOpenId(topPick.measure.id)}>
-              View details <ArrowRight className="size-4" />
-            </Button>
-          </div>
-          <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <Chip label="Annual savings" value={`+${usd(topPick.measure.annualSavings)}/yr`} tone="emerald" />
-            <Chip
-              label="Incentive covered"
-              value={usd(topPick.measure.incentive)}
-              hint={`${usd(topPick.measure.netCost)} net cost`}
-            />
-            <Chip
-              label="Return on investment"
-              value={topPick.measure.roiPercent == null ? "—" : `${num(topPick.measure.roiPercent)}%`}
-              hint={`${years(topPick.measure.paybackYears)} payback`}
-            />
+            <Button variant="outline" className="no-print rounded-xl" onClick={() => setOpenId(topPick.measure.id)}>See this upgrade <ArrowRight className="size-4" /></Button>
           </div>
         </section>
       )}
 
-      {/* D. At-a-glance tags */}
-      <section aria-label="Key facts" className={cn("mt-6 flex flex-wrap gap-2", ENTER, "delay-200")}>
-        {glanceTags(analysis).map((t) => (
-          <span
-            key={t.text}
-            className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white px-3 py-1.5 text-xs text-slate-600 shadow-xs"
-          >
-            <t.icon className="size-3.5 text-slate-400" />
-            {t.text}
-          </span>
-        ))}
-      </section>
+      <BudgetPlanner analysis={analysis} onViewMeasure={setOpenId} />
 
-      {/* C. Remaining opportunities */}
       {others.length > 0 && (
-        <section aria-label="Other opportunities" className={cn("mt-12", ENTER, "delay-300")}>
-          <div className="flex items-end justify-between">
-            <div>
-              <p className={MICRO}>More opportunities</p>
-              <h2 className="mt-1 text-lg font-semibold tracking-tight text-slate-900">Ranked by fit for this building</h2>
-            </div>
-            <p className="hidden text-xs text-slate-400 sm:block">Click a card for the full calculation</p>
-          </div>
+        <details className={cn(SURFACE, "mt-6 p-6 sm:p-8")}>
+          <summary className="cursor-pointer text-sm font-semibold text-slate-800">Explore {others.length} other upgrade options</summary>
+          <p className="mt-3 text-sm text-slate-500">Open an upgrade for its costs and calculations. Alternatives may replace one another.</p>
           <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {others.map((m) => (
-              <OpportunityCard key={m.id} measure={m} scale={paybackScale} onOpen={() => setOpenId(m.id)} />
-            ))}
+            {others.map((m) => <OpportunityCard key={m.id} measure={m} scale={paybackScale} onOpen={() => setOpenId(m.id)} />)}
           </div>
-        </section>
+        </details>
       )}
 
       {/* Next steps */}
       {analysis.nextSteps.length > 0 && (
-        <section aria-label="Next steps" className={cn(SURFACE, "mt-12 p-6 sm:p-8")}>
+        <section aria-label="Next steps" className={cn(SURFACE, "mt-6 p-6 sm:p-8")}>
           <p className={MICRO}>Next steps</p>
           <ol className="mt-4 grid gap-x-8 gap-y-3 sm:grid-cols-2">
             {analysis.nextSteps.map((s, i) => (
@@ -239,24 +160,15 @@ export function AnalysisReport({ analysis, debug }: { analysis: Analysis; debug?
         </section>
       )}
 
-      <TechnicalDetails analysis={analysis} debug={debug} />
+      <details className="mt-6">
+        <summary className="cursor-pointer rounded-2xl border border-slate-200/80 bg-white px-6 py-5 text-sm font-medium text-slate-700">See charts, sources and how we worked this out</summary>
+        <TechnicalDetails analysis={analysis} debug={debug} />
+      </details>
 
       <Sheet open={openRec != null} onOpenChange={(o) => !o && setOpenId(null)}>
         <SheetContent>{openRec && <MeasureDetail rec={openRec} analysis={analysis} />}</SheetContent>
       </Sheet>
     </main>
-  );
-}
-
-function Chip({ label, value, hint, tone }: { label: string; value: string; hint?: string; tone?: "emerald" }) {
-  return (
-    <div className="rounded-xl border border-slate-200/80 bg-white px-4 py-3">
-      <p className="text-[11px] font-medium tracking-wider text-slate-500 uppercase">{label}</p>
-      <p className={cn("mt-1 text-xl font-semibold tracking-tight tabular-nums", tone === "emerald" ? "text-emerald-600" : "text-slate-900")}>
-        {value}
-      </p>
-      {hint && <p className="mt-0.5 text-xs text-slate-500 tabular-nums">{hint}</p>}
-    </div>
   );
 }
 
@@ -322,24 +234,6 @@ function OpportunityCard({ measure: m, scale, onOpen }: { measure: UpgradeMeasur
       </div>
     </button>
   );
-}
-
-function glanceTags(a: Analysis): { icon: typeof Zap; text: string }[] {
-  const tags: { icon: typeof Zap; text: string }[] = [
-    { icon: Zap, text: `${num(a.energy.electricityKwh)} kWh/yr electricity` },
-  ];
-  if (a.energy.naturalGasTherms > 0) tags.push({ icon: Flame, text: `${num(a.energy.naturalGasTherms)} therms/yr gas` });
-  else tags.push({ icon: Flame, text: "No gas service — fuel-switching measures skipped" });
-  const bm = a.energy.benchmark;
-  if (a.energy.euiKbtuPerSqFt != null && bm?.ratio != null) {
-    tags.push({
-      icon: Gauge,
-      text: `EUI ${num(a.energy.euiKbtuPerSqFt)} vs ~${num(bm.typicalEui)} typical (${bm.ratio > 1.1 ? "above" : bm.ratio < 0.9 ? "below" : "near"} benchmark)`,
-    });
-  }
-  tags.push({ icon: Layers, text: `${a.financialSummary.opportunityCount} measures in plan totals` });
-  tags.push({ icon: ShieldCheck, text: `${a.confidence.level[0].toUpperCase()}${a.confidence.level.slice(1)} data confidence` });
-  return tags;
 }
 
 function Row({ label, value, strong }: { label: string; value: string; strong?: boolean }) {
@@ -602,16 +496,16 @@ function TechnicalDetails({ analysis, debug }: { analysis: Analysis; debug?: boo
   }
 
   return (
-    <section aria-label="Technical details" className={cn(SURFACE, "print-expand mt-12 px-6 py-2 sm:px-8")}>
+    <section aria-label="Technical details" className={cn(SURFACE, "print-expand mt-6 px-6 py-2 sm:px-8")}>
       <div className="flex items-center gap-2 pt-5 pb-2">
         <Landmark className="size-4 text-slate-400" />
-        <h2 className="text-sm font-semibold text-slate-900">Technical Details & Assumptions</h2>
+        <h2 className="text-sm font-semibold text-slate-900">Want more detail?</h2>
       </div>
       <Accordion type="multiple">
         {sections.map((s) => (
           <AccordionItem key={s.id} value={s.id} className="border-slate-100">
             <AccordionTrigger className="py-4 text-slate-700 hover:no-underline">{s.title}</AccordionTrigger>
-            <AccordionContent forceMount className="pb-5">
+            <AccordionContent className="pb-5">
               {s.body}
             </AccordionContent>
           </AccordionItem>
